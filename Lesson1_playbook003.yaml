@@ -1,0 +1,15 @@
+- name: lesson 1. Task 3
+  user: ansible
+  become: yes
+  become_method: sudo
+  become_user: root
+  hosts: nodes
+  vars:
+    grubfile: /etc/default/grub
+  tasks:
+  - name: Add param net.ifnames
+    lineinfile: state=present backrefs=yes  dest={{ grubfile }} regexp='^(GRUB_CMDLINE_LINUX=(?!.* net.ifnames)\"[^\"]+)(\".*)' line='\1 net.ifnames=0\2'
+  - name: Add param biosdevname
+    lineinfile: state=present backrefs=yes  dest={{ grubfile }} regexp='^(GRUB_CMDLINE_LINUX=(?!.* biosdevname)\"[^\"]+)(\".*)' line='\1 biosdevname=0\2'
+  - name: Do mkconfig
+    command: grub2-mkconfig -o /boot/grub2/grub.cfg
