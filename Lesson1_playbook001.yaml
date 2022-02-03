@@ -1,4 +1,4 @@
-- name: lesson 1
+- name: lesson 1. Task 1
   user: ansible
   become: yes
   become_method: sudo
