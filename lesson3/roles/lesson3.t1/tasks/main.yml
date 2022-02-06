@@ -1,0 +1,16 @@
+---
+  - name: Install httpd
+    yum: pkg=httpd state=latest
+  - name: Place the index file at www
+    copy: src=index.html dest={{ project_root }}/index.html owner=apache group=apache mode=0644
+  - name: Enable Apache on system reboot
+    service: name=httpd enabled=yes
+    notify: httpd restart
+  - name: Start firewalld if disabled
+    service: name=firewalld state=started enabled=yes
+  - name: Enable 80 port
+    firewalld: zone=public port=80/tcp permanent=true state=enabled
+    notify: firewalld restart
+  - name: Enable 443 port
+    firewalld: zone=public port=443/tcp permanent=true state=enabled
+    notify: firewalld restart

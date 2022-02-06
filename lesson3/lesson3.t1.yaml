@@ -1,0 +1,8 @@
+  - user: ansible
+    become: yes
+    become_method: sudo
+    become_user: root
+    hosts: nodes
+    roles:
+      - lesson3.t1
+ 
