@@ -1,0 +1,22 @@
+- name: lesson 1. Task 2
+  user: ansible
+  become: yes
+  become_method: sudo
+  become_user: root
+  hosts: nodes
+  vars:
+    project_root: /var/www/html
+  tasks:
+  - name: Remove httpd
+    yum: pkg=httpd state=absent
+  - name: Remove index file at www
+    file: path={{ project_root }}/index.html state=absent
+  - name: Disable 80 port
+    firewalld: zone=public port=80/tcp permanent=true state=disabled
+    notify: restart firewalld
+  - name: Disable 443 port
+    firewalld: zone=public port=443/tcp permanent=true state=disabled
+    notify: restart firewalld
+  handlers:
+  - name: restart firewalld
+    service: name=firewalld state=restarted
