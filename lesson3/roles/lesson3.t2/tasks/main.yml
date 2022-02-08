@@ -1,0 +1,27 @@
+  - name: Install vsftpd + selinux
+    yum: pkg='{{ vsftpd_packages }}' state=latest
+  - name: Enable vsftpd on system reboot
+    service: name='{{ vsftpd_service }}' enabled=yes
+  - name: Start firewalld if disabled
+    service: name=firewalld state=started enabled=yes
+  - name: Enable 20 port
+    firewalld: zone=public port=20/tcp permanent=true state=enabled
+    notify: firewalld restart
+  - name: Enable 21 port
+    firewalld: zone=public port=21/tcp permanent=true state=enabled
+    notify: firewalld restart
+  - name: Enable 49000-55000 port
+    firewalld: zone=public port=49000-55000/tcp permanent=true state=enabled
+    notify: firewalld restart
+  - include_vars: default.yml
+  - name: install cfg
+    template: src=etc_vsftpd_vsftpd.conf.j2 dest="{{ vsftpd_config_file }}" mode=0600
+    notify: vsftpd restart
+  - name: Mkdir and chown
+    file: path=/var/ftp/pub/upload state=directory owner=nobody group=nobody mode=777
+  - name: selinux param on
+    seboolean: name=ftpd_anon_write state=yes persistent=yes
+  - name: Allow to write /var/ftp/pub/upload
+    sefcontext: target="/var/ftp/pub/upload(/.*)?" setype=public_content_rw_t state=present
+  - name: Apply new context
+    command: restorecon -F -R -v /var/ftp/pub/upload

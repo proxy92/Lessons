@@ -1,0 +1,26 @@
+# Vsftpd configuration
+# Managed by Ansible, don't edit manually
+#
+# General settings
+#
+connect_from_port_20={{ vsftpd_connect_from_port_20 }}
+listen={{ vsftpd_listen }}
+listen_ipv6={{ vsftpd_listen_ipv6 }}
+pam_service_name={{ vsftpd_service }}
+syslog_enable={{ vsftpd_syslog_enable }}
+#
+# Access control for anonymous users
+#
+anonymous_enable={{ vsftpd_anonymous_enable }}
+anon_root={{ vsftpd_anon_root }}
+anon_mkdir_write_enable={{ vsftpd_anon_mkdir_write_enable }}
+anon_other_write_enable={{ vsftpd_anon_other_write_enable }}
+anon_upload_enable={{ vsftpd_anon_upload_enable }}
+#
+# Access control for registered users
+#
+local_enable={{ vsftpd_local_enable }}
+local_umask={{ vsftpd_local_umask }}
+write_enable={{ vsftpd_write_enable }}
+pasv_min_port=49000
+pasv_max_port=55000

@@ -1,0 +1,8 @@
+vsftpd_packages:
+  - vsftpd
+  - python3-libsemanage
+  - policycoreutils-python-utils
+
+vsftpd_service: vsftpd
+
+vsftpd_config_file: /etc/vsftpd/vsftpd.conf
